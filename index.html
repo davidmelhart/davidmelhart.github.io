@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Thought Bubble - Neighbourhood Map</title>
+  
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+</head>
+<body>
+  
+  <div id="navigation-view" data-bind="with: NavigatonViewModel">
+    
+    <form id="navi-form" class="navi">
+      <input type="text" data-bind="submit: filter" placeholder="Happy Thoughts"></input>
+
+      <p> in </p>
+
+      <input type="text" data-bind="submit: locationValue" placeholder="Location">
+      
+      <button type="button" data-bind="click: updateLocation, updateFilter">Search</button>
+    </form>
+  </div>
+  
+  </div>
+  
+  <div id="map-view">
+  
+    <div id="map">
+    
+    <div id="google-map" ></div>
+    
+    </div>
+  
+    <div id="streetview">
+
+    </div>
+  
+  </div>
+  
+  <div id="twitter-view">
+
+  </div>
+
+</body>
+
+<script asych src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script asych src="js/knockout.js"></script>
+
+<script asych src="js/app.js"></script>
+
+</html>
