@@ -5,7 +5,8 @@ function NavigatonViewModel() {
 	this.filter = ko.observable();
 	this.updateLocation = function() {
 		ko.computed(function(){
-			console.log("hi");
+			console.log($("#filter:input").val());
+			console.log($("#location:input").val());
 		}, this);	
 	}
 
