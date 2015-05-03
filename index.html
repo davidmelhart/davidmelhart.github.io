@@ -17,14 +17,14 @@
   
   <div id="navigation-view" data-bind="with: NavigatonViewModel">
     
-    <form id="navi-form" class="navi">
-      <input type="text" data-bind="submit: filter" placeholder="Happy Thoughts"></input>
+    <form id="navi-form" data-bind="submit: updateLocation" class="navi">
+      <input type="text" data-bind="submit: filter" placeholder="Happy Thoughts">
 
       <p> in </p>
 
-      <input type="text" data-bind="submit: locationValue" placeholder="Location">
+      <input type="text"  placeholder="Location">
       
-      <button type="button" data-bind="click: updateLocation, updateFilter">Search</button>
+      <button type="submit">Search</button>
     </form>
   </div>
   
