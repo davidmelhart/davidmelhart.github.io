@@ -1,13 +1,11 @@
 // VIEWMODEL Start //
 
 function NavigatonViewModel() {
-	this.locationValue = ko.observable();
-	this.filter = ko.observable();
-	this.updateLocation = function() {
-		ko.computed(function(){
-			console.log($("#filter:input").val());
-			console.log($("#location:input").val());
-		}, this);	
+	this.currentFilter = ko.observable("");
+	this.currentLocation = ko.observable("");
+	this.getData = function() {
+		currentFilter = ko.observable($("#filter:input").val());
+		currentLocation = ko.observable($("#location:input").val());
 	}
 
 };
@@ -20,10 +18,15 @@ ko.applyBindings(new NavigatonViewModel());
 
 
 // MODEL Start //
+
+var map;
+var service;
+var infowindow;
+
 function mapRender() {
 	var center = new google.maps.LatLng(50, 8);
 		var mapOptions = {
-			zoom: 4,
+			zoom: 5,
 			center: center,
 			zoomControl: true,
 		    zoomControlOptions: {
@@ -39,13 +42,19 @@ function mapRender() {
 		    mapTypeControl: false,
 			MapTypeId: google.maps.MapTypeId.TERRAIN
 		};
-		var map = new google.maps.Map(document.getElementById("google-map"), mapOptions);
+		map = new google.maps.Map(document.getElementById("google-map"), mapOptions);
+		
+		// Setting custom navigation //
+
 		var naviForm = (document.getElementById("navi-form"));
 		naviForm.index = 1;
     	map.controls[google.maps.ControlPosition.TOP_LEFT].push(naviForm);
 };
 
+//Initializing the map//
+
 window.addEventListener('load', mapRender);
+
 
 
 
