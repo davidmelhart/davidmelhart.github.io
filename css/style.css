@@ -9,8 +9,8 @@ body {
 	width: 100%;
 	text-align: center;
 }
-.navi p{
-	display: inline;
+.navi input{
+	width: 50%;
 }
 
 #map {
