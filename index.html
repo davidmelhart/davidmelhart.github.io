@@ -9,44 +9,43 @@
   <title>Thought Bubble - Neighbourhood Map</title>
   
   <link rel="stylesheet" href="css/style.css">
-
+  <script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+  <script src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
 </head>
 <body>
   
-  <div id="navigation">
-    
-    <form id="navi-form" data-bind="submit: getData" class="navi">
-      <input id="location" type="text" placeholder="Type in a topic and city, like 'Pizza in New York'">
-    </form>
+  <div id="navigation" class="navi">
+      <p>I'm hungry for</p>
+      <input id="filter" type="text" data-bind="value: currentFilter" placeholder="Filter">
+      <p>in</p>
+      <input id="location" type="text" data-bind="submit: currentLocation" placeholder="Location">
+      <button type="submit" id="nav-btn">Look it up!</button>
   </div>
   
-  </div>
-  
-  <div id="map-view">
-  
+
     <div id="map">
     
     <div id="google-map" ></div>
     
     </div>
   
-    <div id="streetview">
+    <div id="places-list" class="yelp">
+      <h1>Places to Go</h1>
+      <ul data-bind="foreach: {data: placesList, as: 'place'}">
 
+          <li>
+            <h2><span data-bind="text: name"></span></h2>
+          </li>
+
+      </ul>
     </div>
-  
-  </div>
-  
-  <div id="twitter-view">
-
-  </div>
 
 </body>
 
 <script asych src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script asych src="js/knockout.js"></script>
-
 <script asych src="js/app.js"></script>
 
 </html>

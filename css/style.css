@@ -3,14 +3,22 @@ body {
 	display: block;
 	margin: 0;
 }
-.navi {
+.navi, #places-list{
 	padding: 20px;
 	background-color: rgba(255, 255, 255, 0.5);
 	width: 100%;
 	text-align: center;
+	display: inline-block;
 }
+
+.navi p {
+	display: inline-block;
+	font-size: 16px;
+}
+
 .navi input{
-	width: 50%;
+	min-width: 150px;
+	width: 30%;
 }
 
 #map {
@@ -21,4 +29,8 @@ body {
 	position: fixed;
 	height: 100%;
 	width: 100%;
+}
+
+#places-list {
+	width: 20%;
 }
