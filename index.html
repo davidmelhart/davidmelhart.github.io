@@ -21,7 +21,7 @@
       <input id="filter" type="text" data-bind="value: currentFilter" placeholder="Filter">
       <p>in</p>
       <input id="location" type="text" data-bind="submit: currentLocation" placeholder="Location">
-      <button type="submit" id="nav-btn">Look it up!</button>
+      <button id="nav-btn">Look it up!</button>
   </div>
   
 
@@ -30,16 +30,18 @@
     <div id="google-map" ></div>
     
     </div>
-  
-    <div id="places-list" class="yelp">
+    
+    <div  id="places" data-bind="visible: placesList().length > 0" class="yelp">
       <h1>Places to Go</h1>
-      <ul data-bind="foreach: {data: placesList, as: 'place'}">
+      <hr>
+      <div id="places-list">
+        <ul data-bind="foreach: {data: placesList, as: 'place'}">
+            <li data-bind="click: $parent.listClick">
+              <h2><span data-bind="text: name"></span></h2>
+            </li>
 
-          <li>
-            <h2><span data-bind="text: name"></span></h2>
-          </li>
-
-      </ul>
+        </ul>
+      </div>
     </div>
 
 </body>
