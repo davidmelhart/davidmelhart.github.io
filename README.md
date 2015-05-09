@@ -51,6 +51,7 @@ This app supports the following countries for search:
 Besides the material that was discusses or touched upon during the course:
 https://developers.google.com/maps/documentation/javascript/
 https://developers.google.com/places/javascript/
+http://knockoutjs.com/documentation
 https://www.yelp.com/developers
 http://oauth.net/
 http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery
