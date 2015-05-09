@@ -185,13 +185,13 @@ function ViewModel () {
 		  placesArray().length = 0;
 		}
 	// Map rendering error handler //
-	var mapErrorHandler = setTimeout(function(){
-		alert("Sorry, we were not able to load the map this time... Try to refresh the page!");
-	}, 5000);
-    google.maps.event.addListener(map, 'tilesloaded', function() {
-    	clearTimeout(mapErrorHandler);
-    });
-	}
+		var mapErrorHandler = setTimeout(function(){
+			alert("Sorry, we were not able to load the map this time... Try to refresh the page!");
+		}, 5000);
+	    google.maps.event.addListener(map, 'tilesloaded', function() {
+	    	clearTimeout(mapErrorHandler);
+	    });
+		}
 
 	google.maps.event.addDomListener(window, 'load', mapRender);
 
