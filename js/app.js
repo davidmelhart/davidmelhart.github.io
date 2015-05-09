@@ -1,9 +1,3 @@
-//Notes:
-//http://ryanrahlf.com/knockout-js-observablearray-not-updating-the-ui-heres-how-to-fix-it/
-
-// VIEWMODEL Start //
-
-// Viewmodel for the navigation //
 function ViewModel () {
 	var self = this;
 	var map;
@@ -15,14 +9,12 @@ function ViewModel () {
 	}
 	self.currentFilter = ko.observable();
 	self.placesList = ko.observableArray([]);
-
 	
 // Creating the map and its functionalities //
 	var markersArray = [];
 	function mapRender() {
 
 		var mapOptions = {
-
 			zoomControl: true,
 			zoomControlOptions: {
 				style: google.maps.ZoomControlStyle.LARGE,
@@ -59,12 +51,16 @@ function ViewModel () {
 		// Create the search box and link it to the UI element.
 		var locationInput = document.getElementById("location");
 
-		var searchBox = new google.maps.places.SearchBox(locationInput);
+		var searchOptions = {
+			types: ['(cities)'],
+			componentRestrictions: {country: "us"}
+		};
+
+		var searchBox = new google.maps.places.SearchBox(locationInput, searchOptions);
 
 		function pinMaker(places){
+			
 			// For each place creating a marker //
-			console.log("X:" + (places[place].location.coordinate.latitude) + " Y:" + (places[place].location.coordinate.longitude));
-
 			var marker = new google.maps.Marker({
 				id: places[place].id,
 				map: map,
@@ -76,8 +72,8 @@ function ViewModel () {
 
 			// For each place creating an infowindow //
 			var infoWindow = new google.maps.InfoWindow({
-				content: "<b>" + places[place].name + "</b></br>" + "<img src=" + places[place].image_url + "></br>" + places[place].location.display_address[0] + ", " + places[place].location.display_address[2]
-				});
+				content: "<div style='text-align: center'><b>" + places[place].name + "</b></br>" + "<img src=" + places[place].image_url + "></br>" + places[place].location.display_address[0] + ", " + places[place].location.display_address[2] + "</div>"
+			});
 
 			// Adding a click event listener to open the info boxes //
 			google.maps.event.addListener(marker, "click", function() {
@@ -85,26 +81,97 @@ function ViewModel () {
 			});
 		}
 
+		var placesArray = ko.observableArray([]);
+
+	// The yelp code was taken from http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery, with gratitude to Jim(coldfusionguy).
+	// As they point out this is not an optimal way to handle consumer keys as they can be compromised, but I wanted to build the app without server side work.
+
+		function yelpRequest (){
+			var auth = {
+				consumerKey: "g7KMBGwZ20TQgGzl6JV9SQ", 
+				consumerSecret: "bw6Ky0YXuSj_eaRO9hNFBrzFeTw",
+				accessToken: "syyIWypoKYS0cPVnd5KdCYpCj5dBfb84",
+				accessTokenSecret: "2VRqfefVBC-umOCo-exlSLDZXik",
+				serviceProvider: { 
+				signatureMethod: "HMAC-SHA1"
+				}
+			};
+
+			var terms = self.currentFilter();
+			var near = self.currentLocation();
+
+			var accessor = {
+				consumerSecret: auth.consumerSecret,
+				tokenSecret: auth.accessTokenSecret
+			};
+
+			parameters = [];
+			parameters.push(['term', terms]);
+			parameters.push(['location', near]);
+			parameters.push(['callback', 'cb']);
+			parameters.push(['oauth_consumer_key', auth.consumerKey]);
+			parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
+			parameters.push(['oauth_token', auth.accessToken]);
+			parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
+
+			var message = { 
+				'action': 'http://api.yelp.com/v2/search',
+				'method': 'GET',
+				'parameters': parameters 
+			};
+
+			OAuth.setTimestampAndNonce(message);
+			OAuth.SignatureMethod.sign(message, accessor);
+
+			var parameterMap = OAuth.getParameterMap(message.parameters);
+			parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
+
+			// Request error handler in case someone does not put in, or mistypes a filter or choose a country that is not supported by Yelp //
+			var errorHandler = setTimeout(function(){
+				alert("Sorry, we were not able to find anything for taste... Try another 'filter' or a city in another country!");
+			}, 2000);
+
+			$.ajax({
+				'url': message.action,
+				'data': parameterMap,
+				'cache': true,
+				'dataType': 'jsonp',
+				'jsonpCallback': 'cb',
+				'success': function(data, textStats, XMLHttpRequest) {
+					clearTimeout(errorHandler);
+					placesArray().push(data.businesses);
+				},
+				// On completion of the request the function for rendering fires //
+				'complete': function () {
+				  	var bounds = new google.maps.LatLngBounds();
+					var places = placesArray()[0];	
+				
+				// Calling pinMaker for each place //		
+					for (place in placesArray()[0]) {
+						pinMaker(places);
+
+						placesArray()[0][place].address = (placesArray()[0][place].location.display_address[0] + ", " + placesArray()[0][place].location.display_address[2]).toString();
+				// Creating placeholders for items that does not have a preview image attached //
+						if (placesArray()[0][place].image_url == undefined) {
+							placesArray()[0][place].image_url = "http://placehold.it/100x100";
+						}
+						self.placesList.push(placesArray()[0][place]);
+
+				
+				// Setting the map to fit into the bounds defined by the marker pins //
+						bounds.extend(markersArray[place].position);
+						map.fitBounds(bounds);
+					}
+
+					
+			  }
+			});
+		}
+
 		document.getElementById("nav-btn").addEventListener("click", function() {
 			// Clearing all previous requests //
 			clearOverlays();
 			yelpRequest();
-			// Giving time for the yelp request to arrive //
-			setTimeout(function(){
-				var bounds = new google.maps.LatLngBounds();
-				var places = placesArray()[0];
-				console.log(places);
-				console.log(places[0])
-			// Calling pinMaker for each place //		
-				for (place in placesArray()[0]) {
-					pinMaker(places);
-					self.placesList.push(placesArray()[0][place]);
-			// Setting the map to fit into the bounds defined by the marker pins //
-					bounds.extend(markersArray[place].position);
-					map.fitBounds(bounds);
-				}
-			}, 1200);
-
 		});
 
 	// Following code was snatched from http://stackoverflow.com/questions/1544739/google-maps-api-v3-how-to-remove-all-markers
@@ -117,88 +184,34 @@ function ViewModel () {
 		  self.placesList([]);
 		  placesArray().length = 0;
 		}
+	// Map rendering error handler //
+	var mapErrorHandler = setTimeout(function(){
+		alert("Sorry, we were not able to load the map this time... Try to refresh the page!");
+	}, 5000);
+    google.maps.event.addListener(map, 'tilesloaded', function() {
+    	clearTimeout(mapErrorHandler);
+    });
 	}
 
 	google.maps.event.addDomListener(window, 'load', mapRender);
 
 	self.listClick = function(place) {
-		console.log(place.id);
-		var marker;
-	
+		var marker; 
+	// Iterating through the markers, trying to find the one with a matching id to place we clicked upon // 
 		for (marker in markersArray) {
 			if (markersArray[marker].id === place.id){
+	// Setting the chosen marker from the markersArray, then breaking the cycle //			
 				marker = markersArray[marker];
-				console.log(marker)
 				break;
 			}
 		}
+	// Pinning the chosen marker, creating and opening the right info window. The code for the infowindow is a bit modified here //
 		map.panTo(marker.position);
+		var infoWindow = new google.maps.InfoWindow({
+				content: "<div style='text-align: center'><b>" + place.name + "</b></br>" + "<img src=" + place.image_url + "></br>" + place.address + "</div>"
+			});
+		infoWindow.open(map, marker);
+		marker.setAnimation(google.maps.Animation.DROP);
 	}
-	
-
-	// VIEWMODEL End //
-
-
-	// MODEL Start //
-
-	// Yelp API request for creating the Model of the presented places.
-	// The code was taken from http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery, with gratitude to Jim(coldfusionguy).
-	// As they point out this is not an optimal way to handle consumer keys as they can be compromised, but I wanted to build the app without server side work.
-	var placesArray = ko.observableArray([]);
-	function yelpRequest (){
-		var auth = {
-		  consumerKey: "g7KMBGwZ20TQgGzl6JV9SQ", 
-		  consumerSecret: "bw6Ky0YXuSj_eaRO9hNFBrzFeTw",
-		  accessToken: "syyIWypoKYS0cPVnd5KdCYpCj5dBfb84",
-		  accessTokenSecret: "2VRqfefVBC-umOCo-exlSLDZXik",
-		  serviceProvider: { 
-		    signatureMethod: "HMAC-SHA1"
-		  }
-		};
-
-		var terms = self.currentFilter();
-		var near = self.currentLocation();
-
-		var accessor = {
-		  consumerSecret: auth.consumerSecret,
-		  tokenSecret: auth.accessTokenSecret
-		};
-
-		parameters = [];
-		parameters.push(['term', terms]);
-		parameters.push(['location', near]);
-		parameters.push(['callback', 'cb']);
-		parameters.push(['oauth_consumer_key', auth.consumerKey]);
-		parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
-		parameters.push(['oauth_token', auth.accessToken]);
-		parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
-
-		var message = { 
-		  'action': 'http://api.yelp.com/v2/search',
-		  'method': 'GET',
-		  'parameters': parameters 
-		};
-
-		OAuth.setTimestampAndNonce(message);
-		OAuth.SignatureMethod.sign(message, accessor);
-
-		var parameterMap = OAuth.getParameterMap(message.parameters);
-		parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
-		console.log(parameterMap);
-
-		$.ajax({
-		  'url': message.action,
-		  'data': parameterMap,
-		  'cache': true,
-		  'dataType': 'jsonp',
-		  'jsonpCallback': 'cb',
-		  'success': function(data, textStats, XMLHttpRequest) {
-		   console.log(data.businesses);
-		   placesArray().push(data.businesses);
-		  }
-		});
-	}	
-
-	// MODEL End //
 }
 ko.applyBindings(new ViewModel());

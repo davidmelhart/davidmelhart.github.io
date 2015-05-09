@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Thought Bubble - Neighbourhood Map</title>
+  <title>David Melhart - Neighbourhood Map</title>
   
   <link rel="stylesheet" href="css/style.css">
   <script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
@@ -18,17 +18,14 @@
   
   <div id="navigation" class="navi">
       <p>I'm hungry for</p>
-      <input id="filter" type="text" data-bind="value: currentFilter" placeholder="Filter">
-      <p>in</p>
-      <input id="location" type="text" data-bind="submit: currentLocation" placeholder="Location">
+      <input id="filter" type="text" data-bind="value: currentFilter" placeholder="Something tasty...">
+      <p>around</p>
+      <input id="location" type="text" data-bind="submit: currentLocation" placeholder="A nice neighbourhood...">
       <button id="nav-btn">Look it up!</button>
   </div>
-  
-
+   
     <div id="map">
-    
     <div id="google-map" ></div>
-    
     </div>
     
     <div  id="places" data-bind="visible: placesList().length > 0" class="yelp">
@@ -38,8 +35,10 @@
         <ul data-bind="foreach: {data: placesList, as: 'place'}">
             <li data-bind="click: $parent.listClick">
               <h2><span data-bind="text: name"></span></h2>
+              <img data-bind="attr: {src: image_url}">
+              <h3><span data-bind="text: address"></span></h3>
+              <hr>
             </li>
-
         </ul>
       </div>
     </div>
