@@ -6,7 +6,7 @@ function ViewModel () {
 	self.currentLocation = function() {
 		var location = $("#location:input").val();
 		return location;
-	}
+	};
 	self.currentFilter = ko.observable();
 	self.placesList = ko.observableArray([]);
 	
@@ -28,7 +28,7 @@ function ViewModel () {
 			panControl: false,
 			mapTypeControl: false,
 			MapTypeId: google.maps.MapTypeId.TERRAIN
-			};
+		};
 
 		map = new google.maps.Map(document.getElementById("google-map"), mapOptions);
 
@@ -57,29 +57,6 @@ function ViewModel () {
 		};
 
 		var searchBox = new google.maps.places.SearchBox(locationInput, searchOptions);
-
-		function pinMaker(places){
-			
-			// For each place creating a marker //
-			var marker = new google.maps.Marker({
-				id: places[place].id,
-				map: map,
-				position: new google.maps.LatLng((places[place].location.coordinate.latitude),(places[place].location.coordinate.longitude)),
-				title: places[place].name,
-				animation: google.maps.Animation.DROP
-			});
-			markersArray.push(marker);
-
-			// For each place creating an infowindow //
-			var infoWindow = new google.maps.InfoWindow({
-				content: "<div style='text-align: center'><b>" + places[place].name + "</b></br>" + "<img src=" + places[place].image_url + "></br>" + places[place].location.display_address[0] + ", " + places[place].location.display_address[2] + "</div>"
-			});
-
-			// Adding a click event listener to open the info boxes //
-			google.maps.event.addListener(marker, "click", function() {
-				infoWindow.open(map, marker);
-			});
-		}
 
 		var placesArray = ko.observableArray([]);
 
@@ -124,11 +101,11 @@ function ViewModel () {
 			OAuth.SignatureMethod.sign(message, accessor);
 
 			var parameterMap = OAuth.getParameterMap(message.parameters);
-			parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
+			parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature);
 
 			// Request error handler in case someone does not put in, or mistypes a filter or choose a country that is not supported by Yelp //
 			var errorHandler = setTimeout(function(){
-				alert("Sorry, we were not able to find anything for taste... Try another 'filter' or a city in another country!");
+				alert("Sorry, we were not able to find anything for taste... Try to check your internet connection or try another 'filter' or a city in another country!");
 			}, 2000);
 
 			$.ajax({
@@ -152,7 +129,7 @@ function ViewModel () {
 
 						placesArray()[0][place].address = (placesArray()[0][place].location.display_address[0] + ", " + placesArray()[0][place].location.display_address[2]).toString();
 				// Creating placeholders for items that does not have a preview image attached //
-						if (placesArray()[0][place].image_url == undefined) {
+						if (placesArray()[0][place].image_url === undefined) {
 							placesArray()[0][place].image_url = "http://placehold.it/100x100";
 						}
 						self.placesList.push(placesArray()[0][place]);
@@ -195,6 +172,34 @@ function ViewModel () {
 
 	google.maps.event.addDomListener(window, 'load', mapRender);
 
+	function pinMaker(places){
+		
+		// For each place creating a marker //
+		var marker = new google.maps.Marker({
+			id: places[place].id,
+			map: map,
+			position: new google.maps.LatLng((places[place].location.coordinate.latitude),(places[place].location.coordinate.longitude)),
+			title: places[place].name,
+			animation: google.maps.Animation.DROP
+		});
+		markersArray.push(marker);
+
+		// For each place creating an infowindow //
+		var infoWindow = new google.maps.InfoWindow({
+			content: 
+				"<div style='text-align: center'><b>"
+				+ places[place].name + "</b></br>"
+				+ "<img src=" + places[place].image_url + "></br>"
+				+ places[place].location.display_address[0] + ", " + places[place].location.display_address[2]
+				+ "</div>"
+		});
+
+		// Adding a click event listener to open the info boxes //
+		google.maps.event.addListener(marker, "click", function() {
+			infoWindow.open(map, marker);
+		});
+	}
+
 	self.listClick = function(place) {
 		var marker; 
 	// Iterating through the markers, trying to find the one with a matching id to place we clicked upon // 
@@ -207,11 +212,18 @@ function ViewModel () {
 		}
 	// Pinning the chosen marker, creating and opening the right info window. The code for the infowindow is a bit modified here //
 		map.panTo(marker.position);
+		
 		var infoWindow = new google.maps.InfoWindow({
-				content: "<div style='text-align: center'><b>" + place.name + "</b></br>" + "<img src=" + place.image_url + "></br>" + place.address + "</div>"
-			});
+			content:
+				"<div style='text-align: center'><b>"
+				+ place.name + "</b></br>"
+				+ "<img src=" + place.image_url + "></br>"
+				+ place.address
+				+ "</div>"
+		});
+
 		infoWindow.open(map, marker);
 		marker.setAnimation(google.maps.Animation.DROP);
-	}
+	};
 }
 ko.applyBindings(new ViewModel());
