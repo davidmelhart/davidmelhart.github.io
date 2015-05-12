@@ -53,19 +53,19 @@ This app supports the following countries for search:
 
 **References:**
 Besides the material that was discusses or touched upon during the course:
--https://developers.google.com/maps/documentation/javascript/
--https://developers.google.com/places/javascript/
--http://knockoutjs.com/documentation
--https://www.yelp.com/developers
--http://oauth.net/
--http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery
--http://ryanrahlf.com/knockout-js-observablearray-not-updating-the-ui-heres-how-to-fix-it/
--http://stackoverflow.com/questions/1544739/google-maps-api-v3-how-to-remove-all-markers
+- https://developers.google.com/maps/documentation/javascript/
+- https://developers.google.com/places/javascript/
+- http://knockoutjs.com/documentation
+- https://www.yelp.com/developers
+- http://oauth.net/
+- http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery
+- http://ryanrahlf.com/knockout-js-observablearray-not-updating-the-ui-heres-how-to-fix-it/
+- http://stackoverflow.com/questions/1544739/google-maps-api-v3-how-to-remove-all-markers
 
--**Version 1.**
--Basic Features implemented
--**Verison 1.1**
--Fixed error handling issues and code readablity
--**Version 1.2**
--Fixed infowindows, now open one at a time
--Added ratings to list view
+**Version 1.0**
+- Basic Features implemented
+**Verison 1.1**
+- Fixed error handling issues and code readablity
+**Version 1.2**
+- Fixed infowindows, now open one at a time
+- Added ratings to list view
