@@ -3,6 +3,10 @@ Udacity - Front End Nanodegree - Project 5
 
 Neighbourhood Map
 --------------
+by David Melhart
+
+The app is available at http://http://davidmelhart.github.io/
+--------------
 
 **Guidelines for use:**
 - The map was created with Google Maps Places and Yelp.
