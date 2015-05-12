@@ -172,6 +172,9 @@ function ViewModel () {
 
 	google.maps.event.addDomListener(window, 'load', mapRender);
 
+	// Creating shared infowidow variable //
+	var infoWindow = new google.maps.InfoWindow();
+	
 	function pinMaker(places){
 		
 		// For each place creating a marker //
@@ -180,23 +183,21 @@ function ViewModel () {
 			map: map,
 			position: new google.maps.LatLng((places[place].location.coordinate.latitude),(places[place].location.coordinate.longitude)),
 			title: places[place].name,
-			animation: google.maps.Animation.DROP
-		});
-		markersArray.push(marker);
-
-		// For each place creating an infowindow //
-		var infoWindow = new google.maps.InfoWindow({
-			content: 
-				"<div style='text-align: center'><b>"
+			animation: google.maps.Animation.DROP,
+		// For each place creating an infowindow content //
+			content: "<div style='text-align: center'><b>"
 				+ places[place].name + "</b></br>"
 				+ "<img src=" + places[place].image_url + "></br>"
 				+ places[place].location.display_address[0] + ", " + places[place].location.display_address[2]
 				+ "</div>"
 		});
+		markersArray.push(marker);
 
 		// Adding a click event listener to open the info boxes //
 		google.maps.event.addListener(marker, "click", function() {
-			infoWindow.open(map, marker);
+			infoWindow.setContent(marker.content);
+			infoWindow.open(map, this);
+			marker.setAnimation(google.maps.Animation.DROP);
 		});
 	}
 
@@ -213,16 +214,15 @@ function ViewModel () {
 	// Pinning the chosen marker, creating and opening the right info window. The code for the infowindow is a bit modified here //
 		map.panTo(marker.position);
 		
-		var infoWindow = new google.maps.InfoWindow({
-			content:
+		var infoContent =
 				"<div style='text-align: center'><b>"
 				+ place.name + "</b></br>"
 				+ "<img src=" + place.image_url + "></br>"
 				+ place.address
-				+ "</div>"
-		});
+				+ "</div>";
 
 		infoWindow.open(map, marker);
+		infoWindow.setContent(infoContent);
 		marker.setAnimation(google.maps.Animation.DROP);
 	};
 }
