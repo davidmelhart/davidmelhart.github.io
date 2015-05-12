@@ -5,7 +5,7 @@ Neighbourhood Map
 --------------
 by David Melhart
 
-The app is available at http://http://davidmelhart.github.io/
+The app is available at http://davidmelhart.github.io/
 --------------
 
 **Guidelines for use:**
