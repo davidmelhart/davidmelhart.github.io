@@ -64,8 +64,10 @@ Besides the material that was discusses or touched upon during the course:
 
 **Version 1.0**
 - Basic Features implemented
+
 **Verison 1.1**
 - Fixed error handling issues and code readablity
+
 **Version 1.2**
 - Fixed infowindows, now open one at a time
 - Added ratings to list view
