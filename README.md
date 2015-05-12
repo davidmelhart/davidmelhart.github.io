@@ -1,7 +1,7 @@
 Udacity - Front End Nanodegree - Project 5
 ==============
 
-Neighbourhood Map
+Neighbourhood Map - version 1.2
 --------------
 by David Melhart
 
@@ -61,3 +61,11 @@ http://oauth.net/
 http://forum.jquery.com/topic/hiding-oauth-secrets-in-jquery
 http://ryanrahlf.com/knockout-js-observablearray-not-updating-the-ui-heres-how-to-fix-it/
 http://stackoverflow.com/questions/1544739/google-maps-api-v3-how-to-remove-all-markers
+
+Version 1.
+Basic Features implemented
+Verison 1.1
+Fixed error handling issues and code readablity
+Version 1.2
+Fixed infowindows, now open one at a time
+Added ratings to list view
