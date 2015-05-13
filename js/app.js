@@ -185,11 +185,11 @@ function ViewModel () {
 			title: places[place].name,
 			animation: google.maps.Animation.DROP,
 		// For each place creating an infowindow content //
-			content: "<div style='text-align: center'><b>"
-				+ places[place].name + "</b></br>"
-				+ "<img src=" + places[place].image_url + "></br>"
-				+ places[place].location.display_address[0] + ", " + places[place].location.display_address[2]
-				+ "</div>"
+			content: "<div style='text-align: center'><b>" +
+				places[place].name + "</b></br>" +
+				"<img src=" + places[place].image_url + "></br>" +
+				places[place].location.display_address[0] + ", " + places[place].location.display_address[2] +
+				"</div>"
 		});
 		markersArray.push(marker);
 
@@ -215,11 +215,11 @@ function ViewModel () {
 		map.panTo(marker.position);
 		
 		var infoContent =
-				"<div style='text-align: center'><b>"
-				+ place.name + "</b></br>"
-				+ "<img src=" + place.image_url + "></br>"
-				+ place.address
-				+ "</div>";
+				"<div style='text-align: center'><b>" +
+				place.name + "</b></br>" +
+				"<img src=" + place.image_url + "></br>" +
+				place.address +
+				"</div>";
 
 		infoWindow.open(map, marker);
 		infoWindow.setContent(infoContent);
