@@ -1,7 +1,7 @@
 function ViewModel () {
 	var self = this;
 	var map;
-
+	var place;
 	// Somehow knockout didn't want to get the full value of the google search box, only the typed in characters. This is an improvised workaround. //
 	self.currentLocation = function() {
 		var location = $("#location:input").val();
@@ -141,7 +141,7 @@ function ViewModel () {
 					}
 
 					
-			  }
+				}
 			});
 		}
 
@@ -168,7 +168,7 @@ function ViewModel () {
 	    google.maps.event.addListener(map, 'tilesloaded', function() {
 	    	clearTimeout(mapErrorHandler);
 	    });
-		}
+	}
 
 	google.maps.event.addDomListener(window, 'load', mapRender);
 
