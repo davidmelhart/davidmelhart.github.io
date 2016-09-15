@@ -5,7 +5,7 @@ Neighbourhood Map - version 1.2
 --------------
 by David Melhart
 
-The app is available at http://davidmelhart.github.io/
+Unfortunately the app is no longer working since June 2016 Google Maps require an authenticated API key.
 --------------
 
 **Guidelines for use:**
